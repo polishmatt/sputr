@@ -1,11 +1,16 @@
 import unittest
 import re
 import click
+import os
 
 @click.command()
-@click.argument('pattern')
+@click.argument('pattern', default='')
 def cli(pattern):
-    if pattern[-3:] == '.py':
+    if pattern == '':
+        suite = unittest.defaultTestLoader.discover(start_dir='.')
+    elif os.sep in pattern:
+        # run exact file
+    elif pattern[-3:] == '.py':
         suite = unittest.defaultTestLoader.discover(start_dir='.', pattern=pattern)
     else:
         suite = unittest.defaultTestLoader.discover(start_dir='.')
