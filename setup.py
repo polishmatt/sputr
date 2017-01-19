@@ -6,6 +6,13 @@ with open(os.path.join('sputr', 'VERSION')) as file:
 setup(
     name='sputr',
     version=version,
+    description='Simple Python Unit Test Runner',
+    author='Matt Wisniewski',
+    author_email='sputr@mattw.us',
+    license='MIT',
+    url='https://github.com/polishmatt/sputr',
+    keywords=['testing'],
+    classifiers=[],
     packages=[
         'sputr'
     ],
