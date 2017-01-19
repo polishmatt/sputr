@@ -9,7 +9,8 @@ def cli(pattern):
     if pattern == '':
         suite = unittest.defaultTestLoader.discover(start_dir='.')
     elif os.sep in pattern:
-        # run exact file
+        # run exact file or directory
+        pass
     elif pattern[-3:] == '.py':
         suite = unittest.defaultTestLoader.discover(start_dir='.', pattern=pattern)
     else:
