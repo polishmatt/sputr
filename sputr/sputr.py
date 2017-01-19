@@ -2,13 +2,17 @@
 import unittest
 import re
 import os
+import importlib
 
 def discover(start_dir='.', pattern=''):
     if pattern == '':
         suite = unittest.defaultTestLoader.discover(start_dir=start_dir)
+    elif os.sep in pattern and pattern[-3:] == '.py':
+        package = pattern[:-3].replace(os.path.sep, '.')
+        module = importlib.import_module(package)
+        suite = unittest.defaultTestLoader.loadTestsFromModule(module)
     elif os.sep in pattern:
-        # run exact file or directory
-        pass
+        suite = unittest.defaultTestLoader.discover(start_dir=pattern)
     elif pattern[-3:] == '.py':
         suite = unittest.defaultTestLoader.discover(start_dir=start_dir, pattern=pattern)
     else:
