@@ -1,9 +1,9 @@
 import unittest
 
-class MostExactTest(unittest.TestCase):
-    def test_most_exact(self):
-        print 'most_exact'
+class ExactTest(unittest.TestCase):
+    def test_exact_name(self):
+        pass
 
-    def test_most_exact2(self):
-        print 'most_exact2'
+    def test_exact(self):
+        pass
 
