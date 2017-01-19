@@ -1,8 +1,11 @@
 from setuptools import setup, find_packages
 
+with open(os.path.join('sputr', 'VERSION')) as file:
+    version = file.read().strip()
+
 setup(
     name='sputr',
-    version='0.1',
+    version=version,
     packages=[
         'sputr'
     ],
