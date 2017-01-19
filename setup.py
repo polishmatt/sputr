@@ -1,8 +1,7 @@
 from setuptools import setup, find_packages
-import os
+import importlib
 
-with open(os.path.join('sputr', 'VERSION')) as file:
-    version = file.read().strip()
+version = importlib.import_module('sputr.config').version
 
 setup(
     name='sputr',
