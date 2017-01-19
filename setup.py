@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import os
 
 with open(os.path.join('sputr', 'VERSION')) as file:
     version = file.read().strip()
