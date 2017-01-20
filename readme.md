@@ -2,7 +2,9 @@
 
 Simple Python Unit Test Runner
 
-## Examples
+An intuitive command line and Python package interface for Python's unit testing framework.
+
+## Command Line Examples
 
 ### Run all tests in the current directory
 `sputr`
@@ -23,4 +25,14 @@ Simple Python Unit Test Runner
 `sputr test_name`
 
 `sputr test_name_*`
+
+## Python Package Examples
+
+`sputr.discover` returns a [TestSuite](https://docs.python.org/2/library/unittest.html#unittest.TestSuite).
+
+```python
+import sputr
+suite = sputr.discover(start_dir='.', pattern='test_*')
+unittest.TextTestRunner().run(suite)
+```
 
