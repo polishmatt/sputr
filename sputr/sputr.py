@@ -5,21 +5,30 @@ import os
 import importlib
 
 def discover(start_dir='.', pattern=''):
-    if pattern == '':
-        suite = unittest.defaultTestLoader.discover(start_dir=start_dir)
-    elif os.sep in pattern and pattern[-3:] == '.py':
+    if os.sep in pattern and pattern[-3:] == '.py':
         package = pattern[:-3].replace(os.path.sep, '.')
         module = importlib.import_module(package)
-        suite = unittest.defaultTestLoader.loadTestsFromModule(module)
-    elif os.sep in pattern:
-        suite = unittest.defaultTestLoader.discover(start_dir=pattern)
+        return unittest.defaultTestLoader.loadTestsFromModule(module)
+
+    kwargs = {
+        'start_dir': start_dir,
+    }
+    search = False
+
+    if os.sep in pattern:
+        kwargs['start_dir'] = pattern
     elif pattern[-3:] == '.py':
-        suite = unittest.defaultTestLoader.discover(start_dir=start_dir, pattern=pattern)
-    else:
-        discover_suite = unittest.defaultTestLoader.discover(start_dir=start_dir)
+        kwargs['pattern'] = pattern
+    elif pattern != '':
+        search = True
+
+    suite = unittest.defaultTestLoader.discover(**kwargs)
+
+    if search:
+        tests = list_tests(suite)
         suite = unittest.TestSuite()
 
-        for test in list_tests(discover_suite):
+        for test in tests:
             if re.search(pattern, test.id()) is not None:
                 suite.addTest(test)
 
