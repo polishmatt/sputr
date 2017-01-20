@@ -7,21 +7,14 @@ start_dir = os.path.join(os.path.dirname(__file__), 'fixtures')
 class DiscoverTest(unittest.TestCase):
     def assert_suite_matches_pattern(self, pattern, tests):
         suite = sputr.discover(start_dir=start_dir, pattern=pattern)
-        items = [item for item in suite]
         unexpected = []
 
-        while len(items):
-            nextItems = []
-            for item in items:
-                if hasattr(item, '__iter__'):
-                    nextItems += [ nextItem for nextItem in item ]
-                else:
-                    name = item.id()[item.id().rfind('.') + 1:]
-                    if name in tests:
-                        tests.remove(name)
-                    else:
-                        unexpected.append(item.id())
-            items = nextItems
+        for test in sputr.list_tests(suite):
+            name = test.id()[test.id().rfind('.') + 1:]
+            if name in tests:
+                tests.remove(name)
+            else:
+                unexpected.append(test.id())
 
         failures = []
         if len(tests) > 0:

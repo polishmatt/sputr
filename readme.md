@@ -36,3 +36,10 @@ suite = sputr.discover(start_dir='.', pattern='test_*')
 unittest.TextTestRunner().run(suite)
 ```
 
+`sputr.list_tests` converts a TestSuite to a list of [TestCase](https://docs.python.org/2/library/unittest.html#unittest.TestCase) objects which can be iterated over easily.
+
+```python
+for test in sputr.list_tests(suite):
+    print test.id()
+```
+
