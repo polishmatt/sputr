@@ -12,7 +12,13 @@ setup(
     license='MIT',
     url='https://github.com/polishmatt/sputr',
     keywords=['testing'],
-    classifiers=[],
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 2.7',
+    ],
     packages=[
         'sputr'
     ],
