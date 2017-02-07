@@ -1,12 +1,13 @@
+from __future__ import absolute_import
 import click
 import unittest
-import sputr
-import config
 import sys
 import os
+import sputr
+from .config import version
 
 @click.command()
-@click.version_option(version=config.version)
+@click.version_option(version=version)
 @click.argument('pattern', default='')
 @click.option('--start_dir', default='.', show_default=True)
 def cli(pattern, start_dir):
