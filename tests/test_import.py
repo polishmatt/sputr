@@ -4,7 +4,7 @@ import os
 
 class ImportTest(unittest.TestCase):
     def test_import(self):
-        expected = os.path.join(os.path.join(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')), 'sputr'), 'sputr.py')
+        expected = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'sputr', 'sputr.py'))
         found = sputr.__file__
         if found not in [expected, expected + 'c']:
             self.fail("""
