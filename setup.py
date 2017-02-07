@@ -23,7 +23,7 @@ setup(
         'sputr'
     ],
     install_requires=[
-        'click==6.6'
+        'click==6.7'
     ],
     entry_points={
         'console_scripts': [
