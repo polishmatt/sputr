@@ -1,15 +1,14 @@
-import unittest
 import os
-import sputr
+from tests import SputrTest
 
 start_dir = os.path.join(os.path.dirname(__file__), 'fixtures')
 
-class DiscoverTest(unittest.TestCase):
+class DiscoverTest(SputrTest):
     def assert_suite_matches_pattern(self, pattern, tests):
-        suite = sputr.discover(start_dir=start_dir, pattern=pattern)
+        suite = self.sputr.discover(start_dir=start_dir, pattern=pattern)
         unexpected = []
 
-        for test in sputr.list_tests(suite):
+        for test in self.sputr.list_tests(suite):
             name = test.id()[test.id().rfind('.') + 1:]
             if name in tests:
                 tests.remove(name)
