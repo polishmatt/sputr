@@ -1,5 +1,7 @@
 # Sputr
 
+[![Build Status](https://travis-ci.org/polishmatt/sputr.svg?branch=master)](https://travis-ci.org/polishmatt/sputr)
+
 Simple Python Unit Test Runner
 
 An intuitive command line and Python package interface for Python's unit testing framework.
