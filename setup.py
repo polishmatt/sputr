@@ -7,7 +7,7 @@ setup(
     name='sputr',
     version=version,
     description='Simple Python Unit Test Runner',
-    long_description=open('readme.md').read(),
+    long_description="An intuitive command line and Python package interface for Python's unit testing framework.",
     author='Matt Wisniewski',
     author_email='sputr@mattw.us',
     license='MIT',
