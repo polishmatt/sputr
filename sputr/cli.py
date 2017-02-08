@@ -7,11 +7,11 @@ import sputr
 from .config import version
 
 @click.command()
-@click.version_option(version=version)
 @click.argument('pattern', default='')
-@click.option('--start_dir', default='.', show_default=True, help='Directory to start discovery')
-@click.option('--verbose', is_flag=True, help='More output')
-@click.option('--quiet', is_flag=True, help='Less output')
+@click.version_option(version=version)
+@click.option('--start_dir', '-s', default='.', show_default=True, help='Directory to start discovery')
+@click.option('--verbose', '-v', is_flag=True, help='More output')
+@click.option('--quiet', '-q', is_flag=True, help='Less output')
 def cli(pattern, start_dir, verbose, quiet):
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
