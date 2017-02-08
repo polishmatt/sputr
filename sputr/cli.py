@@ -9,13 +9,24 @@ from .config import version
 @click.command()
 @click.version_option(version=version)
 @click.argument('pattern', default='')
-@click.option('--start_dir', default='.', show_default=True)
-def cli(pattern, start_dir):
+@click.option('--start_dir', default='.', show_default=True, help='Directory to start discovery')
+@click.option('--verbose', is_flag=True, help='More output')
+@click.option('--quiet', is_flag=True, help='Less output')
+def cli(pattern, start_dir, verbose, quiet):
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
 
     suite = sputr.discover(pattern=pattern, start_dir=start_dir)
-    unittest.TextTestRunner().run(suite)
+
+    if verbose:
+        verbosity = 2
+    elif quiet:
+        verbosity = 0
+    else:
+        verbosity = 1
+    unittest.TextTestRunner(
+        verbosity=verbosity
+    ).run(suite)
 
 if __name__ == '__main__':
     cli()
