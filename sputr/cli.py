@@ -15,11 +15,16 @@ from .config import version
 @click.option('--failfast', '-f', is_flag=True, help='Stop execution on test failure or error')
 @click.option('--buffer', '-b', is_flag=True, help='Buffer stdout and stderr during tests')
 @click.option('--catch', '-c', is_flag=True, help='Display test results after keyboard interrupt (control-c)')
-def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch):
+@click.option('--top_level_dir', '-t', help='Top level directory of the project')
+def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir):
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
 
-    suite = sputr.discover(pattern=pattern, start_dir=start_dir)
+    suite = sputr.discover(
+        start_dir=start_dir, 
+        pattern=pattern, 
+        top_level_dir=top_level_dir
+    )
 
     if verbose:
         verbosity = 2

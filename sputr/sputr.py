@@ -4,7 +4,7 @@ import re
 import os
 import importlib
 
-def discover(start_dir='.', pattern=''):
+def discover(start_dir='.', pattern='', top_level_dir=None):
     if os.sep in pattern and pattern[-3:] == '.py':
         package = pattern[:-3].replace(os.path.sep, '.')
         module = importlib.import_module(package)
@@ -12,6 +12,7 @@ def discover(start_dir='.', pattern=''):
 
     kwargs = {
         'start_dir': start_dir,
+        'top_level_dir': top_level_dir,
     }
     search = False
 
