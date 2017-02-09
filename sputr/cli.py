@@ -14,7 +14,8 @@ from .config import version
 @click.option('--quiet', '-q', is_flag=True, help='Less output')
 @click.option('--failfast', '-f', is_flag=True, help='Stop execution on test failure or error')
 @click.option('--buffer', '-b', is_flag=True, help='Buffer stdout and stderr during tests')
-def cli(pattern, start_dir, verbose, quiet, failfast, buffer):
+@click.option('--catch', '-c', is_flag=True, help='Display test results after keyboard interrupt (control-c)')
+def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch):
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
 
@@ -26,11 +27,18 @@ def cli(pattern, start_dir, verbose, quiet, failfast, buffer):
         verbosity = 0
     else:
         verbosity = 1
+
+    if catch:
+        unittest.installHandler()
+
     unittest.TextTestRunner(
         verbosity=verbosity,
         failfast=failfast,
         buffer=buffer
     ).run(suite)
+
+    if catch:
+        unittest.removeHandler()
 
 if __name__ == '__main__':
     cli()
