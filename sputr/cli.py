@@ -12,8 +12,9 @@ from .config import version
 @click.option('--start_dir', '-s', default='.', show_default=True, help='Directory to start discovery')
 @click.option('--verbose', '-v', is_flag=True, help='More output')
 @click.option('--quiet', '-q', is_flag=True, help='Less output')
+@click.option('--failfast', '-f', is_flag=True, help='Stop execution on test failure or error')
 @click.option('--buffer', '-b', is_flag=True, help='Buffer stdout and stderr during tests')
-def cli(pattern, start_dir, verbose, quiet, buffer):
+def cli(pattern, start_dir, verbose, quiet, failfast, buffer):
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
 
@@ -27,6 +28,7 @@ def cli(pattern, start_dir, verbose, quiet, buffer):
         verbosity = 1
     unittest.TextTestRunner(
         verbosity=verbosity,
+        failfast=failfast,
         buffer=buffer
     ).run(suite)
 
