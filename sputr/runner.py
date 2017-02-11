@@ -2,12 +2,12 @@ import unittest
 import subprocess
 import sputr
 
-class SimpleResult(unittest.TestResult):
+class SimpleTestResult(unittest.TestResult):
 
     def stopTest(self, test):
         self.log_status(self.testsRun, len(self.failures), len(self.errors), len(self.skipped))
 
-class SimpleRunner():
+class SimpleTestRunner():
 
     def color(value):
         return '\x1b[%sm' % value

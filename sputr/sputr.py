@@ -68,7 +68,6 @@ def run(**kwargs):
         del kwargs['python']
         child = subprocess.Popen([python, os.path.dirname(os.path.abspath(__file__)), '--json', '"' + json.dumps(kwargs) + '"'])
         data = child.communicate()
-        print(data)
         sys.exit(child.returncode)
 
     if sys.path[0] != os.getcwd():
@@ -84,7 +83,12 @@ def run(**kwargs):
     last = kwargs['runner'].rfind('.')
     package = kwargs['runner'][:last]
     runner = kwargs['runner'][last + 1:]
-    module = importlib.import_module(package)
+    try:
+        module = importlib.import_module(package)
+    except ImportError:
+        if package[:6] == 'sputr.':
+            package = package[6:]
+            module = importlib.import_module(package)
     runner = getattr(module, runner)(
         verbosity=verbosity,
         failfast=kwargs['failfast'],
