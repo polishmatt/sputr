@@ -37,7 +37,8 @@ sputr test_name_*          -run all tests that match a pattern
     show_default=True, 
     help='Test runner to use when running tests'
 )
-def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir, runner):
+@click.option('--color', is_flag=True, help='Add colors to output if supported by the test runner')
+def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir, runner, color):
 
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
@@ -58,6 +59,7 @@ def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_d
         failfast=failfast,
         buffer=buffer
     )
+    runner.color = color
 
     suite = sputr.discover(
         start_dir=start_dir, 
