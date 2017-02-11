@@ -4,6 +4,7 @@ import os
 import importlib
 import sys
 import subprocess
+import json
 
 def discover(start_dir='.', pattern='', top_level_dir=None):
 
@@ -60,54 +61,47 @@ def list_tests(suite):
 
     return tests
 
-def run(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir, runner, color, python):
-    if python is not None:
-        flags = ['--python', '-p']
-        remove_next = False
-        for index, argv in enumerate(sys.argv):
-            for flag in flags:
-                if argv == flag:
-                    sys.argv.remove(argv)
-                    del sys.argv[index]
-                    if index + 1 < len(sys.argv):
-                        del sys.argv[index + 1]
-                elif argv[:len(flag)] == flag:
-                    del sys.argv[index]
-        child = subprocess.Popen([python] + sys.argv)
-        child.communicate()
+def run(**kwargs):
+
+    if kwargs.get('python', None) is not None:
+        python = kwargs['python']
+        del kwargs['python']
+        child = subprocess.Popen([python, os.path.dirname(os.path.abspath(__file__)), '--json', '"' + json.dumps(kwargs) + '"'])
+        data = child.communicate()
+        print(data)
         sys.exit(child.returncode)
 
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
 
-    if verbose:
+    if kwargs['verbose']:
         verbosity = 2
-    elif quiet:
+    elif kwargs['quiet']:
         verbosity = 0
     else:
         verbosity = 1
 
-    last = runner.rfind('.')
-    package = runner[:last]
-    runner = runner[last + 1:]
+    last = kwargs['runner'].rfind('.')
+    package = kwargs['runner'][:last]
+    runner = kwargs['runner'][last + 1:]
     module = importlib.import_module(package)
     runner = getattr(module, runner)(
         verbosity=verbosity,
-        failfast=failfast,
-        buffer=buffer
+        failfast=kwargs['failfast'],
+        buffer=kwargs['buffer']
     )
-    runner.color = color
+    runner.color = kwargs['color']
 
     suite = discover(
-        start_dir=start_dir, 
-        pattern=pattern, 
-        top_level_dir=top_level_dir
+        start_dir=kwargs['start_dir'], 
+        pattern=kwargs['pattern'], 
+        top_level_dir=kwargs['top_level_dir']
     )
 
-    if catch:
+    if kwargs['catch']:
         unittest.installHandler()
     result = runner.run(suite)
-    if catch:
+    if kwargs['catch']:
         unittest.removeHandler()
 
     sys.exit(0 if result.wasSuccessful() else 1)
