@@ -3,6 +3,8 @@ import click
 import unittest
 import sys
 import os
+import importlib
+
 import sputr
 from .config import version
 
@@ -29,16 +31,16 @@ sputr test_name_*          -run all tests that match a pattern
 @click.option('--buffer', '-b', is_flag=True, help='Buffer stdout and stderr during tests')
 @click.option('--catch', '-c', is_flag=True, help='Display test results after keyboard interrupt (control-c)')
 @click.option('--top_level_dir', '-t', help='Top level directory of the project')
-def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir):
+@click.option(
+    '--runner', '-r', 
+    default='unittest.TextTestRunner', 
+    show_default=True, 
+    help='Test runner to use when running tests'
+)
+def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir, runner):
 
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
-
-    suite = sputr.discover(
-        start_dir=start_dir, 
-        pattern=pattern, 
-        top_level_dir=top_level_dir
-    )
 
     if verbose:
         verbosity = 2
@@ -47,15 +49,25 @@ def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_d
     else:
         verbosity = 1
 
-    if catch:
-        unittest.installHandler()
-
-    result = unittest.TextTestRunner(
+    last = runner.rfind('.')
+    package = runner[:last]
+    runner = runner[last + 1:]
+    module = importlib.import_module(package)
+    runner = getattr(module, runner)(
         verbosity=verbosity,
         failfast=failfast,
         buffer=buffer
-    ).run(suite)
+    )
 
+    suite = sputr.discover(
+        start_dir=start_dir, 
+        pattern=pattern, 
+        top_level_dir=top_level_dir
+    )
+
+    if catch:
+        unittest.installHandler()
+    result = runner.run(suite)
     if catch:
         unittest.removeHandler()
 
