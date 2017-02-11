@@ -1,9 +1,7 @@
 from __future__ import absolute_import
 import click
-import unittest
 import sys
 import os
-import importlib
 
 import sputr
 from .config import version
@@ -43,42 +41,8 @@ sputr test_name_*          -run all tests that match a pattern
     help='Test runner to use when running tests'
 )
 @click.option('--color', is_flag=True, help='Add colors to output if supported by the test runner')
-def click_cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir, runner, color):
-
-    if sys.path[0] != os.getcwd():
-        sys.path.insert(0, os.getcwd())
-
-    if verbose:
-        verbosity = 2
-    elif quiet:
-        verbosity = 0
-    else:
-        verbosity = 1
-
-    last = runner.rfind('.')
-    package = runner[:last]
-    runner = runner[last + 1:]
-    module = importlib.import_module(package)
-    runner = getattr(module, runner)(
-        verbosity=verbosity,
-        failfast=failfast,
-        buffer=buffer
-    )
-    runner.color = color
-
-    suite = sputr.discover(
-        start_dir=start_dir, 
-        pattern=pattern, 
-        top_level_dir=top_level_dir
-    )
-
-    if catch:
-        unittest.installHandler()
-    result = runner.run(suite)
-    if catch:
-        unittest.removeHandler()
-
-    sys.exit(0 if result.wasSuccessful() else 1)
+def click_cli(*args, **kwargs):
+    sputr.run(*args, **kwargs)
 
 if __name__ == '__main__':
     cli()
