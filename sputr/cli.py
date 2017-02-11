@@ -50,7 +50,7 @@ def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_d
     if catch:
         unittest.installHandler()
 
-    unittest.TextTestRunner(
+    result = unittest.TextTestRunner(
         verbosity=verbosity,
         failfast=failfast,
         buffer=buffer
@@ -58,6 +58,8 @@ def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_d
 
     if catch:
         unittest.removeHandler()
+
+    sys.exit(0 if result.wasSuccessful() else 1)
 
 if __name__ == '__main__':
     cli()
