@@ -1,13 +1,22 @@
-
 import unittest
 import re
 import os
 import importlib
+import sys
 
 def discover(start_dir='.', pattern='', top_level_dir=None):
+
+    if top_level_dir == None:
+        top_level_dir = start_dir
+
     if os.sep in pattern and pattern[-3:] == '.py':
-        package = pattern[:-3].replace(os.path.sep, '.')
-        module = importlib.import_module(package)
+        # This approach was chosen over the more explicit use of paths with imp/importlib
+        #   since they appear to be bugged and pick up parent modules with the same name as well.
+        sys.path.insert(0, start_dir)
+        name = pattern[:-3].replace(os.path.sep, '.')
+        module = importlib.import_module(name)
+        del sys.path[0]
+
         return unittest.defaultTestLoader.loadTestsFromModule(module)
 
     kwargs = {
@@ -17,7 +26,7 @@ def discover(start_dir='.', pattern='', top_level_dir=None):
     search = False
 
     if os.sep in pattern:
-        kwargs['start_dir'] = pattern
+        kwargs['start_dir'] += os.path.sep + pattern
     elif pattern[-3:] == '.py':
         kwargs['pattern'] = pattern
     elif pattern != '':

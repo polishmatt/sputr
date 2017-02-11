@@ -1,7 +1,7 @@
 import os
 from tests import SputrTest
 
-start_dir = os.path.join(os.path.dirname(__file__), 'fixtures')
+start_dir = os.path.join(os.path.dirname(__file__), 'fixtures', 'discover')
 
 class DiscoverTest(SputrTest):
     def assert_suite_matches_pattern(self, pattern, tests):
@@ -46,12 +46,12 @@ class DiscoverTest(SputrTest):
         ])
 
     def test_exact_one_file(self):
-        self.assert_suite_matches_pattern('tests/fixtures/exact/test_exact.py', [
+        self.assert_suite_matches_pattern('exact/test_exact.py', [
             'test_most_exact',
         ])
 
     def test_exact_dir(self):
-        self.assert_suite_matches_pattern('tests/fixtures/exact', [
+        self.assert_suite_matches_pattern('exact/', [
             'test_most_exact',
             'test_exact_dir',
         ])
