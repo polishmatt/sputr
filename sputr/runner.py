@@ -25,6 +25,10 @@ class SimpleTestRunner():
         1: '{purple}%s total, {green}%s ran, {red}%s failed, {yellow}%s error, {cyan}%s skipped{end}',
         2: '{purple}%s will be run.\n{green}%s have been run.\n{red}%s have failed.\n{yellow}%s have returned an error.\n{cyan}%s have been skipped.{end}',
     }
+    result_messages = {
+        'failures': '{red}%s\n%s{end}',
+        'errors': '{yellow}%s\n%s{end}',
+    }
 
     def __init__(self, verbosity=1, failfast=False, buffer=False):
         self.verbosity = verbosity
@@ -47,6 +51,8 @@ class SimpleTestRunner():
                 self.colors[name] = ''
         for level, message in self.status_messages.items():
             self.status_messages[level] = message.format(**self.colors)
+        for level, message in self.result_messages.items():
+            self.result_messages[level] = message.format(**self.colors)
 
         if hasattr(suite, 'countTestCases'):
             self.test_count = suite.countTestCases()
@@ -59,5 +65,12 @@ class SimpleTestRunner():
 
         self.log('\n' * (self.num_status_lines() - 1))
         suite.run(result)
+
+        if self.verbosity > 0:
+            for type in ['failures', 'errors']:
+                self.log(type.upper() + '\n')
+                for incident in getattr(result, type):
+                    self.log(self.result_messages[type] % (incident[0].id(), incident[1]))
+
         return result
 
