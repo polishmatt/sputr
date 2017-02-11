@@ -68,9 +68,10 @@ class SimpleTestRunner():
 
         if self.verbosity > 0:
             for type in ['failures', 'errors']:
-                self.log(type.upper() + '\n')
-                for incident in getattr(result, type):
-                    self.log(self.result_messages[type] % (incident[0].id(), incident[1]))
+                if len(getattr(result, type)) > 0:
+                    self.log(type.upper() + '\n')
+                    for incident in getattr(result, type):
+                        self.log(self.result_messages[type] % (incident[0].id(), incident[1]))
 
         return result
 
