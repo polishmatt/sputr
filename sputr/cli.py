@@ -8,6 +8,11 @@ import importlib
 import sputr
 from .config import version
 
+def cli():
+    if 'SPUTR_OPTIONS' in os.environ:
+        sys.argv += os.environ['SPUTR_OPTIONS'].split()
+    click_cli()
+
 @click.command(
     help='Simple Python Unit Test Runner',
     epilog="""\b\bExamples:\n
@@ -38,7 +43,7 @@ sputr test_name_*          -run all tests that match a pattern
     help='Test runner to use when running tests'
 )
 @click.option('--color', is_flag=True, help='Add colors to output if supported by the test runner')
-def cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir, runner, color):
+def click_cli(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir, runner, color):
 
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
