@@ -3,6 +3,7 @@ import re
 import os
 import importlib
 import sys
+import subprocess
 
 def discover(start_dir='.', pattern='', top_level_dir=None):
 
@@ -59,7 +60,23 @@ def list_tests(suite):
 
     return tests
 
-def run(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir, runner, color):
+def run(pattern, start_dir, verbose, quiet, failfast, buffer, catch, top_level_dir, runner, color, python):
+    if python is not None:
+        flags = ['--python', '-p']
+        remove_next = False
+        for index, argv in enumerate(sys.argv):
+            for flag in flags:
+                if argv == flag:
+                    sys.argv.remove(argv)
+                    del sys.argv[index]
+                    if index + 1 < len(sys.argv):
+                        del sys.argv[index + 1]
+                elif argv[:len(flag)] == flag:
+                    del sys.argv[index]
+        child = subprocess.Popen([python] + sys.argv)
+        child.communicate()
+        sys.exit(child.returncode)
+
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
 

@@ -4,7 +4,10 @@ import sys
 import os
 
 import sputr
-from .config import version
+try:
+    from .config import version
+except ValueError:
+    from config import version
 
 def cli():
     if 'SPUTR_OPTIONS' in os.environ:
@@ -41,6 +44,7 @@ sputr test_name_*          -run all tests that match a pattern
     help='Test runner to use when running tests'
 )
 @click.option('--color', is_flag=True, help='Add colors to output if supported by the test runner')
+@click.option('--python', '-p', help='Python binary to run tests with')
 def click_cli(*args, **kwargs):
     sputr.run(*args, **kwargs)
 
