@@ -4,6 +4,7 @@ import os
 import importlib
 import sys
 import subprocess
+import signal
 import json
 
 def discover(start_dir='.', pattern='', top_level_dir=None):
@@ -66,9 +67,18 @@ def run(**kwargs):
     if kwargs.get('python', None) is not None:
         python = kwargs['python']
         del kwargs['python']
-        child = subprocess.Popen([python, os.path.dirname(os.path.abspath(__file__)), '--json', '"' + json.dumps(kwargs) + '"'])
-        data = child.communicate()
-        sys.exit(child.returncode)
+        child = subprocess.Popen([
+            python, 
+            os.path.dirname(os.path.abspath(__file__)), 
+            '--json', 
+            '"' + json.dumps(kwargs) + '"'
+        ])
+        try:
+            data = child.communicate()
+            sys.exit(child.returncode)
+        except KeyboardInterrupt:
+            child.send_signal(signal.SIGINT)
+            raise
 
     if sys.path[0] != os.getcwd():
         sys.path.insert(0, os.getcwd())
