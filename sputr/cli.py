@@ -12,10 +12,7 @@ def cli():
     if 'SPUTR_OPTIONS' in os.environ:
         sys.argv += os.environ['SPUTR_OPTIONS'].split()
     
-    try:
-        from .click_cli import click_cli
-    except (ValueError, SystemError):
-        from click_cli import click_cli
+    from .click_cli import click_cli
     click_cli()
 
 

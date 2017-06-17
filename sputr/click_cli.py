@@ -1,10 +1,8 @@
+from __future__ import absolute_import
 import click
 
 import sputr
-try:
-    from .config import version
-except (ValueError, SystemError):
-    from config import version
+from .config import version
 
 @click.command(
     help='Simple Python Unit Test Runner',
