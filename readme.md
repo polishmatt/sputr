@@ -4,7 +4,7 @@
 
 Simple Python Unit Test Runner
 
-An intuitive command line and Python package interface for Python's unit testing framework.
+An intuitive command line and Python package interface for Python's unit testing framework with consistent behavior across Python versions.
 
 ## Command Line Examples
 
