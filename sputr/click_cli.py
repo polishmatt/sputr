@@ -34,7 +34,6 @@ sputr test_name_*          -run all tests that match a pattern
     help='Test runner to use when running tests'
 )
 @click.option('--color', is_flag=True, help='Add colors to output if supported by the test runner')
-@click.option('--python', '-p', help='Python binary to run tests with')
 @click.option('--json', help='Include options as JSON instead of requiring click')
 def click_cli(*args, **kwargs):
     sputr.run(*args, **kwargs)
