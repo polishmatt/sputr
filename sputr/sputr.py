@@ -101,5 +101,5 @@ def run(**kwargs):
     if kwargs['catch']:
         unittest.removeHandler()
 
-    sys.exit(0 if result.wasSuccessful() else 1)
+    sys.exit(0 if result.wasSuccessful() and (result.testsRun > 0 or kwargs['allow_none']) else 1)
 

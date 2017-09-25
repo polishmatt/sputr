@@ -26,3 +26,24 @@ class CLITest(SputrTest):
             self.fail('received success exit code when error expected')
         except subprocess.CalledProcessError:
             pass
+
+    def test_exit_fail_none(self):
+        try:
+            with open(os.devnull, 'w') as FNULL:
+                subprocess.check_call(
+                    ['python', '-msputr', '-s' + start_dir, 'test_none'],
+                    stdout=FNULL,
+                    stderr=subprocess.STDOUT
+                )
+            self.fail('received success exit code when error expected')
+        except subprocess.CalledProcessError:
+            pass
+
+    def test_exit_success_none(self):
+        with open(os.devnull, 'w') as FNULL:
+            subprocess.check_call(
+                ['python', '-msputr', '-s' + start_dir, '--allow-none', 'test_none'],
+                stdout=FNULL,
+                stderr=subprocess.STDOUT
+            )
+
