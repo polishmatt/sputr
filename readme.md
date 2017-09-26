@@ -45,3 +45,10 @@ for test in sputr.list_tests(suite):
     print test.id()
 ```
 
+## Breaking Changes
+
+### 1.1.0
+
+* Removed --python option ([issue #3](https://github.com/polishmatt/sputr/issues/3))
+* Exit code 1 returned when no tests are run ([issue #4](https://github.com/polishmatt/sputr/issues/4))
+
