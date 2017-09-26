@@ -42,6 +42,7 @@ class SimpleTestRunner():
         return 5 if self.verbosity == 2 else 1
 
     def log_status(self, *args):
+        # Move cursor to the start of the previous line
         subprocess.call(['tput', 'cuu', str(self.num_status_lines()), '&&', 'tput', 'el'])
         self.log(self.status_messages[self.verbosity] % ((self.test_count,) + args))
 
